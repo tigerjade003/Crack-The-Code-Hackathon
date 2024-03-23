@@ -13,6 +13,11 @@ def encrypt(connection, message):
 #decrypt
 def decrypt_message(connection, encrypted):
         return connection.decrypt(encrypted_message).decode()
+
+
+
+
+
 #USAGE EXAMPLE
 #key = generate_key()
 #connect = connection(key)
