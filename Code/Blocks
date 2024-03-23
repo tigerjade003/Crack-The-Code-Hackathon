@@ -2,6 +2,7 @@ import hashlib
 import datetime as date
 from encryption import gethash
 import datetime
+from encrypt_decrypt import
 
 
 #example data = ("apple", "banana")
@@ -12,7 +13,7 @@ class Block:
         self.index = index
         self.previous_hash = previous_hash
         self.data = data
-        self.timestamp = timestamp
+        #self.timestamp = timestamp
         
 class Blockchain:
     def __init__(self):
