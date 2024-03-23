@@ -3,3 +3,4 @@ class pair:
         self.a = a
         self.b = b
 
+#this pair is used for the encryption function, which stores both the normal digest and hexdigest.
