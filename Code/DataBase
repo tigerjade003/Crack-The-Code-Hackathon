@@ -1,13 +1,26 @@
 import sqlite3
 from encryption import gethash
+import os.path
 
 database = sqlite3.connect("password.db")
 cur = database.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS user(hash, hexhash)")
+works = bool(False)
+counter = 0
 def start():
+    if(os.path.isfile("passwords.txt")):
+        cur.execute("DELETE FROM user")
+        cur.execute("CREATE TABLE IF NOT EXISTS user(hash, hexhash)")
+        f = open("passwords.txt", "r")
+        Lines = f.readlines()
+        for a in Lines:
+            e = a.split()
+            for k in e:
+                k.strip()
+            cur.execute("INSERT INTO user VALUES (?, ?)", e)
+
     global counter
     global works
-    
     works = bool(False)
     counter = 0
 def create():
@@ -31,17 +44,3 @@ def check(hash1, hash2):
     if(row1 is not None and row2 is not None):
         return bool(True)
     return bool(False)
-
-create()
-create()
-
-
-cur1 = cur.execute("SELECT hash from user")
-cur1 = cur1.fetchall()
-cur2 = cur.execute("SELECT hexhash from user")
-cur2 = cur2.fetchall()
-f = open("passwords.txt", "w")
-for i in range(counter):
-    strre = str(cur1[i]) + " " + str(cur2[i])
-    f.write(strre)
-
