@@ -1,7 +1,8 @@
 import hashlib
 import datetime as date
 from encryption import gethash
-from datetime import datetime
+import datetime
+
 
 #example data = ("apple", "banana")
 
