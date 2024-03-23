@@ -1,1 +1,16 @@
+import hashlib
+import datetime as date
+from encryption import gethash
+
+class Block:  
+    def __int__(self, index, data: str, previous_block=None):
+        #index tells position or number value assigned to block
+        self.index = index
+        self.timestamp = date.datetime.now()
+        #basic connection/chain 
+        self.previous_block = previous_block  
+        #converts information of this block? haven't added unique uers/names to each block
+        self.data = self.gethash(data)
+        
+
 
