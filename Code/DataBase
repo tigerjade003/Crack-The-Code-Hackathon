@@ -1,0 +1,18 @@
+import sqlite3
+from encryption import gethash
+
+database = sqlite3.connect("password.db")
+cur = database.cursor()
+cur.execute("CREATE TABLE IF NOT EXISTS user(hash, hexhash)")
+def start():
+    global counter
+    counter = 0
+def create():
+    username = input("Please Enter Your UserName: ")
+    password = input("Please Enter Your Password: ")
+    e = gethash(username, password)
+    params = (e.a, e.b)
+    cur.execute("INSERT INTO user VALUES (?, ?)", params)
+    global counter
+    counter+=1
+
