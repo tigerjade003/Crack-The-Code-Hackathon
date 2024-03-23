@@ -6,6 +6,8 @@ cur = database.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS user(hash, hexhash)")
 def start():
     global counter
+    global works
+    works = bool(False)
     counter = 0
 def create():
     username = input("Please Enter Your UserName: ")
@@ -13,6 +15,9 @@ def create():
     e = gethash(username, password)
     params = (e.a, e.b)
     cur.execute("INSERT INTO user VALUES (?, ?)", params)
+    global works
+    if not works:
+        works = bool(True)
+        start()
     global counter
     counter+=1
-
