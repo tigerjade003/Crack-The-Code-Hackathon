@@ -6,8 +6,8 @@ def gethash(username, password):
     m = hashlib.sha256()
     m.update(username.encode('utf8'))
     m.update(password.encode('utf8'))
+    #encodes both password and username
     e = pair(m.digest(), m.hexdigest())
     return e
-
-
+    #then returns it
 
