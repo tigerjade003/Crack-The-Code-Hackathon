@@ -8,7 +8,7 @@ from encrypt_decrypt import generate_key, connection, encrypt, decrypt_message
 #example data = ("apple", "banana")
 
 class Block:  
-    def __int__(self, index, previous_hash, data, timestamp):
+    def __init__(self, index, previous_hash, data, timestamp):
         #index tells position or number value assigned to block
         self.index = index
         self.previous_hash = previous_hash
