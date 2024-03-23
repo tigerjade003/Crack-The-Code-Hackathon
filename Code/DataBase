@@ -7,6 +7,7 @@ cur.execute("CREATE TABLE IF NOT EXISTS user(hash, hexhash)")
 def start():
     global counter
     global works
+    
     works = bool(False)
     counter = 0
 def create():
@@ -21,3 +22,26 @@ def create():
         start()
     global counter
     counter+=1
+
+def check(hash1, hash2):
+    cur.execute("SELECT * FROM database WHERE hash = ?", (hash1,))
+    cur.execute("SELECT * FROM database WHERE hexhash = ?", (hash2,))
+    row1 = cur.fetchone()
+    row2 = cur.fetchone()
+    if(row1 is not None and row2 is not None):
+        return bool(True)
+    return bool(False)
+
+create()
+create()
+
+
+cur1 = cur.execute("SELECT hash from user")
+cur1 = cur1.fetchall()
+cur2 = cur.execute("SELECT hexhash from user")
+cur2 = cur2.fetchall()
+f = open("passwords.txt", "w")
+for i in range(counter):
+    strre = str(cur1[i]) + " " + str(cur2[i])
+    f.write(strre)
+
