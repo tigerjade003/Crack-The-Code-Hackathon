@@ -1,3 +1,28 @@
-import secrets
+from cryptography.fernet import Fernet, InvalidToken
 
-key = secrets.token_bytes(32)
+def generate_key():
+    return Fernet.generate_key()
+
+def connection(key):
+    return Fernet(key)
+
+#encrypt
+
+def encrypt(connection, message):
+    return connection.encrypt(message.encode())
+#decrypt
+def decrypt_message(connection, encrypted):
+        return connection.decrypt(encrypted_message).decode()
+#USAGE EXAMPLE
+#key = generate_key()
+#connect = connection(key)
+
+# Encrypt a message
+#message = "This is a secret message."
+#encrypted_message = encrypt(connect, message)
+#print("Encrypted message:", encrypted_message)
+
+# Decrypt the message
+#decrypted_message = decrypt_message(connect, encrypted_message)
+#print("Decrypted message:", decrypted_message)
+
