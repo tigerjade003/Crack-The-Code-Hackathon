@@ -1,8 +1,8 @@
 import hashlib
-import datetime as date
+from datetime import datetime
 from encryption import gethash
-import datetime
-from encrypt_decrypt import
+
+from encrypt_decrypt import generate_key, connection, encrypt, decrypt_message
 
 
 #example data = ("apple", "banana")
@@ -13,12 +13,27 @@ class Block:
         self.index = index
         self.previous_hash = previous_hash
         self.data = data
-        #self.timestamp = timestamp
+        self.timestamp = timestamp
+        self.hash = calhash
+
+    def calhash(self):
+        converted = hashlib.sha256()
+        converted.update(str(self.index).encode('utf-8') +
+                   str(self.previous_hash).encode('utf-8') +
+                   str(self.data).encode('utf-8') +
+                   str(self.timestamp).encode('utf-8'))
+        return converted.hexdigest()
+
+
+        
         
 class Blockchain:
     def __init__(self):
         self.chain = []
-
+        self.create_base_block()
+    def create_base_block(self):
+        base_block = Block(0, "0", "Start Block", datetime.now())
+        base_block.hash = base_block.calhash()
 
 
 
