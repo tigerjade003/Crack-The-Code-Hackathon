@@ -5,7 +5,7 @@ import os.path
 database = sqlite3.connect("password.db")
 cur = database.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS user(hash, hexhash)")
-works = bool(False)
+works = False
 counter = 0
 def start():
     if(os.path.isfile("passwords.txt")):
@@ -21,7 +21,7 @@ def start():
 
     global counter
     global works
-    works = bool(False)
+    works = False
     counter = 0
 def create():
     username = input("Please Enter Your UserName: ")
@@ -31,30 +31,19 @@ def create():
     cur.execute("INSERT INTO user VALUES (?, ?)", params)
     global works
     if not works:
-        works = bool(True)
+        works = True
         start()
     global counter
-    counter+=1
+    counter += 1
 
 def check(hash1, hash2):
-    cur.execute("SELECT * FROM database WHERE hash = ?", (hash1,))
-    cur.execute("SELECT * FROM database WHERE hexhash = ?", (hash2,))
-    row1 = cur.fetchone()
-    row2 = cur.fetchone()
-    if(row1 is not None and row2 is not None):
-        return bool(True)
-    return bool(False)
-
-create()
-create()
-
-
-cur1 = cur.execute("SELECT hash from user")
-cur1 = cur1.fetchall()
-cur2 = cur.execute("SELECT hexhash from user")
-cur2 = cur2.fetchall()
-f = open("passwords.txt", "a")
-for i in range(counter):
-    strre = str(cur1[i]) + " " + str(cur2[i])
-    f.write(strre)
+    try:
+        cur.execute("SELECT * FROM user WHERE hash = ? AND hexhash = ?", (hash1, hash2))
+        row2 = cur.fetchall()
+        if len(row2) >= 1:
+            return True
+        return False
+    except Exception as e:
+        print("Error:", e)
+        return False
 
