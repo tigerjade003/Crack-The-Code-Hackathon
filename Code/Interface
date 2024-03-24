@@ -1,0 +1,23 @@
+import sys
+
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox
+
+class App(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+    def initUI(self):
+        self.setWindowTitle('Communication')
+        self.setGeometry(100, 100, 300, 200)
+        self.button = QPushButton('Login', self)
+        self.button.setGeometry(100, 100, 100, 50)
+        self.button.clicked.connect(self.showMessageBox)
+        self.show()
+    def showMessageBox(self):
+        QMessageBox.information(self, ' LOGIN FAILEd', 'Button Clicked!')
+        
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = App()
+    sys.exit(app.exec_())
