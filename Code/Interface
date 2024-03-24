@@ -1,21 +1,36 @@
 import sys
-
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox
-
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox, QLabel, QLineEdit
+from database import check, start
+from encryption import gethash
 class App(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
     def initUI(self):
         self.setWindowTitle('Communication')
-        self.setGeometry(100, 100, 300, 200)
+        self.setGeometry(100, 100, 400, 400)
         self.button = QPushButton('Login', self)
-        self.button.setGeometry(100, 100, 100, 50)
+        self.label = QLabel('Enter Your Username', self)
+        self.label2 = QLabel('Enter Your Password', self)
+        self.PassBox = QLineEdit(self)
+        self.PassBox2 = QLineEdit(self)
+        self.PassBox.setGeometry(99, 155, 200, 20)
+        self.label.setGeometry(100, 100, 400, 100)
+        self.label2.setGeometry(100, 140, 400, 100)
+        self.PassBox2.setGeometry(100, 200, 200, 20)
+        self.button.setGeometry(150, 250, 100, 50)
         self.button.clicked.connect(self.showMessageBox)
         self.show()
     def showMessageBox(self):
-        QMessageBox.information(self, ' LOGIN FAILEd', 'Button Clicked!')
-        
+        a = self.PassBox.text()
+        b = self.PassBox.text()
+        e = gethash(a, b)
+        start()
+        if(check(e.a, e.b)):
+            QMessageBox.information(self, 'Test', 'You have entered a valid password!')
+        else:
+            QMessageBox.information(self, 'Test', 'You have trolled yourself!')
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
