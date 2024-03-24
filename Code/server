@@ -1,1 +1,47 @@
 
+import socket
+import hashlib
+from contextlib import closing
+from datetime import datetime
+from Blocks import Block, Blockchain
+from encrypt_decrypt import generate_key, connection, encrypt, decrypt_message
+
+
+# Initialize blockchain
+blockchain = Blockchain()
+key = generate_key()
+def start_server(host, port, max_connections=5):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+        server_socket.bind((host, port))
+        server_socket.listen(max_connections)
+        print(f"Server started on {host}:{port}. Waiting for connections...")
+
+        while True:
+            try:
+                client_socket, addr = server_socket.accept()
+                with closing(client_socket):
+                    print(f"Connected to {addr}")
+                    while True:
+                        # Receive message from client
+                        encrypted_data = client_socket.recv(1024)
+                        if not encrypted_data:
+                            break
+                        #decypt the recived data from client
+                        decrypted_data = decrypt_message(connection(key), encrypted_data).decode('ascii')
+                        print(f"Client says: {decrypted_data}")
+                        # Add decrypted_data to blockchain
+                        blockchain.add_block(decrypted_data)
+                        # Send response to client
+                        server_response = input("Enter your response: ")
+                        encrypted_response = encrypt(connection(key), server_response)
+                        # Add server response to blockchain
+
+                        blockchain.add_block(server_response)
+                        client_socket.sendall(encrypted_response)
+            except Exception as e:
+                print(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    host = socket.gethostname()
+    port = 9999
+    start_server(host, port)
