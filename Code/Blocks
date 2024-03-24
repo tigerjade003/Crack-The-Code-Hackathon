@@ -55,7 +55,7 @@ class Blockchain:
         
         if current_block.hash != current_block.calhash():
             return bool(False)
-        if previous_block != previous_block.calhash():
+        if previous_block.hash != previous_block.calhash():
             return bool(False)
         return bool(True)
 
