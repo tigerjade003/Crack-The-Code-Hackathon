@@ -58,27 +58,20 @@ class Blockchain:
         return True
 
 
+# Example usage:
+#my_blockchain = Blockchain()
 
+# Encrypt a message and add it as a block
+#message_to_encrypt = "Your secret message goes here"
+#encrypted_message, encryption_key = encrypt_message(message_to_encrypt)
+#my_blockchain.add_block(encrypted_message)
 
+# Verify the blockchain
+#print("Blockchain valid:", my_blockchain.is_chain_valid())
 
-
-        
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Decrypt the message from the blockchain
+#encrypted_block_data = my_blockchain.chain[1].data
+#decrypted_message = decrypt_message(encrypted_block_data, encryption_key)
+#print("Decrypted message:", decrypted_message)
 
 
