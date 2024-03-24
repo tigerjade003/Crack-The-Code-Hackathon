@@ -1,0 +1,33 @@
+import socket
+import threading
+
+def receive_messages(sock):
+    while True:
+        data, addr = sock.recvfrom(1024)
+        print(f"Received message from {addr}: {data.decode()}")
+
+def client():
+    # Create a UDP socket
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    # Bind the socket to a random port
+    client_socket.bind(('0.0.0.0', 0))
+    client_address = client_socket.getsockname()
+
+    print(f"Client started on {client_address}")
+
+    # Start a thread to receive messages
+    receive_thread = threading.Thread(target=receive_messages, args=(client_socket,))
+    receive_thread.start()
+
+    while True:
+        # Get input from the user
+        message = input("Enter message: ")
+
+        # Send the message to the peer
+        peer_address = input("Enter peer's IP address: ")
+        peer_port = int(input("Enter peer's port: "))
+        client_socket.sendto(message.encode(), (peer_address, peer_port))
+
+if __name__ == "__main__":
+    client()
