@@ -1,7 +1,6 @@
 import hashlib
 from datetime import datetime
 from encryption import gethash
-import DataBase
 
 from encrypt_decrypt import generate_key, connection, encrypt, decrypt_message
 
@@ -42,21 +41,20 @@ class Blockchain:
 
     def add_block(self, data):
         last_block = self.latest_block()
-        new_index = latest_block.index + 1
+        new_index = last_block.index + 1
         new_timestamp = datetime.now()
-        new_block = Block(new_index, latest_block.hash, data, new_timestamp)
+        new_block = Block(new_index, last_block.hash, data, new_timestamp)
         new_block.hash = new_block.calhash()
         self.chain.append(new_block)
 
     def check_validity(self):
         for i in range(1, len(self.chain)):
-        current_block = self.chain[i]
-        previous_block = self.chain[i-1]
-        
-        if current_block.hash != current_block.calhash():
-            return bool(False)
-        if previous_block.hash != previous_block.calhash():
-            return bool(False)
+            current_block = self.chain[i]
+            previous_block = self.chain[i-1]
+            if current_block.hash != current_block.calhash():
+                return bool(False)
+            if previous_block.hash != previous_block.calhash():
+                return bool(False)
         return bool(True)
 
 
