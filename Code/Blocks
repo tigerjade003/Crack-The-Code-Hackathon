@@ -1,6 +1,6 @@
 import hashlib
 from datetime import datetime
-from encryption import gethash
+
 
 from encrypt_decrypt import generate_key, connection, encrypt, decrypt_message
 
