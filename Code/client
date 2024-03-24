@@ -5,7 +5,7 @@ from contextlib import closing
 from datetime import datetime
 from Blocks import Block, Blockchain
 from encrypt_decrypt import generate_key, connection, encrypt, decrypt_message
-
+from cryptography.fernet import Fernet
 # Initialize blockchain
 blockchain = Blockchain()
 
@@ -14,7 +14,8 @@ def connect_to_server(host, port):
         try:
             client_socket.connect((host, port))
             print(f"Connected to server {host}:{port}")
-
+            key = client_socket.recv(1024)
+            fernet = Fernet(key)
             while True:
                 # Prompt user for input
                 message = input("Enter your message: ")
@@ -28,10 +29,11 @@ def connect_to_server(host, port):
                 # Receive encrypted response from server
                 encrypted_response = client_socket.recv(1024)
                 # Decrypt the server response
-                decrypted_response = decrypt_message(connection(key), encrypted_response).decode('ascii')
+                decrypted_response = decrypt_message(connection(key), encrypted_response)
                 # Add server response to blockchain
                 blockchain.add_block(decrypted_response)
                 print(f"Server says: {decrypted_response}")
+
         except Exception as e:
             print(f"An error occurred: {e}")
         finally:
