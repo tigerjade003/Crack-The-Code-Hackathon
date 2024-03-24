@@ -52,10 +52,10 @@ class Blockchain:
             current_block = self.chain[i]
             previous_block = self.chain[i-1]
             if current_block.hash != current_block.calhash():
-                return bool(False)
+                return False
             if previous_block.hash != previous_block.calhash():
-                return bool(False)
-        return bool(True)
+                return False
+        return True
 
 
 
