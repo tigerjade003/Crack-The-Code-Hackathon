@@ -1,5 +1,62 @@
+#DEVICE 1
 import socket
 
-HOST = '_' #place sever's local network IP adress/scan with varible thingy later on
+import ssl
 
-PORT = 
+HOST = 'your_server_ip'  # Replace with the server's local network IP address
+PORT = 65432             # Port to listen on (non-privileged ports are > 1023)
+
+# Create a socket object
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Bind the socket to the address and port
+server_socket.bind((HOST, PORT))
+
+# Wrap the socket with SSL for encryption
+context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+context.load_cert_chain(certfile='server.crt', keyfile='server.key')  # Load your certificate and private key
+
+# Listen for incoming connections
+server_socket.listen()
+print(f"Secure server is listening on {HOST}:{PORT}")
+
+# Accept a connection
+conn, addr = server_socket.accept()
+with conn:
+    print(f"Connected by {addr}")
+    while True:
+        data = conn.recv(1024)
+        if not data:
+            break
+        print(f"Received from client: {data.decode()}")
+        response = input("Enter your response: ")
+        conn.sendall(response.encode())
+
+
+#DEVICE 2
+#import socket
+#import ssl
+
+HOST = 'your_server_ip'  # Replace with the server's local network IP address
+PORT = 65432             # The port used by the server
+
+# Create a socket object
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Wrap the socket with SSL for encryption
+context = ssl.create_default_context()
+context.check_hostname = False
+context.verify_mode = ssl.CERT_NONE
+
+# Connect to the server
+secure_socket = context.wrap_socket(client_socket, server_hostname=HOST)
+secure_socket.connect((HOST, PORT))
+
+try:
+    while True:
+        message = input("Enter your message: ")
+        secure_socket.sendall(message.encode())
+        data = secure_socket.recv(1024)
+        print(f"Received from server: {data.decode()}")
+finally:
+    secure_socket.close()
