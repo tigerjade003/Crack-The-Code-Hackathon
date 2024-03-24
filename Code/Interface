@@ -2,10 +2,13 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox, QLabel, QLineEdit
 from encryption import gethash
 from database import start, check, create
+
+
 class App(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+
     def initUI(self):
         self.setWindowTitle('Communication')
         self.setGeometry(100, 100, 400, 400)
@@ -26,14 +29,16 @@ class App(QWidget):
         self.show()
 
     def Signup(self):
-        a = self.PassBox.text()
-        b = self.PassBox2.text()
-        print(a+  " " + b)
-        e = gethash(str(a), str(b))
-        start()
-        create(str(e.a), str(e.b))
-        QMessageBox.information(self, 'Test', 'You have succesfully signed up!')
-
+        try:
+            a = self.PassBox.text()
+            b = self.PassBox2.text()
+            print(str(a) + " " + str(b))
+            start()
+            create(str(a), str(b))
+            QMessageBox.information(self, 'Test', 'You have succesfully signed up!')
+            self.showIP()
+        except Exception as e:
+            print("ERROR: ", e)
 
     def showMessageBox(self):
         a = self.PassBox.text()
@@ -42,8 +47,17 @@ class App(QWidget):
         start()
         if check(e.a, e.b):
             QMessageBox.information(self, 'Test', 'You have entered a valid password!')
+            self.showIP()
         else:
             QMessageBox.information(self, 'Test', 'You have trolled yourself!')
+
+    def showIP(self):
+        self.button.hide()
+        self.label.hide()
+        self.label2.hide()
+        self.signup.hide()
+        self.PassBox.hide()
+        self.PassBox2.hide()
 
 
 if __name__ == '__main__':
