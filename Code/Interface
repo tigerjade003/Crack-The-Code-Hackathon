@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox, QLabel, QLineEdit
-from database import check, start
 from encryption import gethash
+from database import start, check
 class App(QWidget):
     def __init__(self):
         super().__init__()
@@ -23,10 +23,10 @@ class App(QWidget):
         self.show()
     def showMessageBox(self):
         a = self.PassBox.text()
-        b = self.PassBox.text()
+        b = self.PassBox2.text()
         e = gethash(a, b)
         start()
-        if(check(e.a, e.b)):
+        if check(e.a, e.b):
             QMessageBox.information(self, 'Test', 'You have entered a valid password!')
         else:
             QMessageBox.information(self, 'Test', 'You have trolled yourself!')
