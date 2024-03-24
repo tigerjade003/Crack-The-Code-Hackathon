@@ -14,6 +14,8 @@ def encrypt(connection, message):
 def decrypt_message(connection, encrypted):
         return connection.decrypt(encrypted_message).decode()
 
+#encrypted Message varrible here is to be intialized later such as in the interface
+
 
 
 
@@ -24,7 +26,7 @@ def decrypt_message(connection, encrypted):
 
 # Encrypt a message
 #message = "This is a secret message."
-#encrypted_message = encrypt(connect, message)
+#encrypted_message = encrypt(connect, message) 
 #print("Encrypted message:", encrypted_message)
 
 # Decrypt the message
