@@ -1,9 +1,9 @@
 from cryptography.fernet import Fernet, InvalidToken
 
-def generate_key():
+def generate_key(): #generates a random collection of letters
     return Fernet.generate_key()
 
-def connection(key):
+def connection(key): #connection translates the key into translatable form for Fernet
     return Fernet(key)
 
 #encrypt
@@ -14,22 +14,15 @@ def encrypt(connection, message):
 def decrypt_message(connection, encrypted):
         return connection.decrypt(encrypted_message).decode()
 
-#encrypted Message varrible here is to be intialized later such as in the interface
-
-
-
-
-
 #USAGE EXAMPLE
 #key = generate_key()
 #connect = connection(key)
 
 # Encrypt a message
 #message = "This is a secret message."
-#encrypted_message = encrypt(connect, message) 
+#encrypted_message = encrypt(connect, message)
 #print("Encrypted message:", encrypted_message)
 
 # Decrypt the message
 #decrypted_message = decrypt_message(connect, encrypted_message)
 #print("Decrypted message:", decrypted_message)
-
