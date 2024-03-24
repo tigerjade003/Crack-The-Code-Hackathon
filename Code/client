@@ -1,8 +1,10 @@
-#----CLIENT SIDE
+#----CLIENT SIDE TRANSFER VARIBLE DATA OF KEY
 import socket
+import hashlib
 from contextlib import closing
+from datetime import datetime
+from Blocks import Block, Blockchain
 from encrypt_decrypt import generate_key, connection, encrypt, decrypt_message
-
 
 # Initialize blockchain
 blockchain = Blockchain()
