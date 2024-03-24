@@ -1,18 +1,27 @@
-import socket
+from scapy.all import ARP, Ether, srp
 
-def get_lan_ip():
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as temp_socket:
-            temp_socket.connect(("8.8.8.8", 80))
+def discover_local_network():
+    # Create an ARP request packet
+    arp = ARP(pdst="10.20.66.0/24")  # Set the target IP range (replace with your local network range)
 
-            lan_ip = temp_socket.getsockname()[0]
-        return lan_ip
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
+    # Create an Ethernet frame
+    ether = Ether(dst="ff:ff:ff:ff:ff:ff")
 
-#EXAMPLE OF USAGE
+    # Combine ARP and Ethernet frame
+    packet = ether / arp
+
+    # Send the packet and capture responses
+    result = srp(packet, timeout=3, verbose=0)[0]
+
+    # Extract IP addresses from the responses
+    active_ips = []
+    for sent, received in result:
+        active_ips.append(received.psrc)
+
+    return active_ips
+
 if __name__ == "__main__":
-    my_lan_ip = get_lan_ip()
-    if my_lan_ip:
-        print(f"My LAN IP Address is: {my_lan_ip}")
+    active_ips = discover_local_network()
+    print("Active IP addresses on the local network:")
+    for ip in active_ips:
+        print(ip)
