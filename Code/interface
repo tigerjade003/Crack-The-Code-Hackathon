@@ -6,5 +6,3 @@ from cryptography.fernet import Fernet
 
 from encryption import gethash
 from encrypt_decrypt import generate_key, connection, encrypt, decrypt_message
-
-def user_int():
