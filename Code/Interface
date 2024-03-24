@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox, QLabel, QLineEdit
 from encryption import gethash
-from database import start, check
+from database import start, check, create
 class App(QWidget):
     def __init__(self):
         super().__init__()
@@ -12,15 +12,29 @@ class App(QWidget):
         self.button = QPushButton('Login', self)
         self.label = QLabel('Enter Your Username', self)
         self.label2 = QLabel('Enter Your Password', self)
+        self.signup = QPushButton('Sign Up', self)
         self.PassBox = QLineEdit(self)
         self.PassBox2 = QLineEdit(self)
         self.PassBox.setGeometry(99, 155, 200, 20)
+        self.signup.setGeometry(100, 250, 100, 50)
         self.label.setGeometry(100, 100, 400, 100)
         self.label2.setGeometry(100, 140, 400, 100)
         self.PassBox2.setGeometry(100, 200, 200, 20)
-        self.button.setGeometry(150, 250, 100, 50)
+        self.button.setGeometry(200, 250, 100, 50)
         self.button.clicked.connect(self.showMessageBox)
+        self.signup.clicked.connect(self.Signup)
         self.show()
+
+    def Signup(self):
+        a = self.PassBox.text()
+        b = self.PassBox2.text()
+        print(a+  " " + b)
+        e = gethash(str(a), str(b))
+        start()
+        create(str(e.a), str(e.b))
+        QMessageBox.information(self, 'Test', 'You have succesfully signed up!')
+
+
     def showMessageBox(self):
         a = self.PassBox.text()
         b = self.PassBox2.text()
