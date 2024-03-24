@@ -20,32 +20,25 @@ def connect_to_server(host, port):
 
             #wait for sever to ask
 
-            server_request = client_socket.recv(1024).decode('utf-8')
-            print(server_request)  # Print the server's request to the console
 
-            # Prompt the user to accept or decline the connection
-            response = input("Do you want to connect to the server? (yes/no): ")
-            client_socket.sendall(response.encode())  # Send the response back to the server
+            while True:
 
-            if response.lower() == 'yes':
-                while True:
-
-                    # Prompt user for input
-                    message = input("Enter your message: ")
-                    if message.lower() == 'exit':
-                        break
-                    encrypted_message = encrypt(connection(key), message)
+                # Prompt user for input
+                message = input("Enter your message: ")
+                if message.lower() == 'exit':
+                    break
+                encrypted_message = encrypt(connection(key), message)
                 # Add user message to blockchain
-                    blockchain.add_block(message)
+                blockchain.add_block(message)
                 # Send encrypted message to server
-                    client_socket.sendall(encrypted_message)
+                client_socket.sendall(encrypted_message)
                 # Receive encrypted response from server
-                    encrypted_response = client_socket.recv(1024)
+                encrypted_response = client_socket.recv(1024)
                 # Decrypt the server response
-                    decrypted_response = decrypt_message(connection(key), encrypted_response)
+                decrypted_response = decrypt_message(connection(key), encrypted_response)
                 # Add server response to blockchain
-                    blockchain.add_block(decrypted_response)
-                    print(f"Server says: {decrypted_response}")
+                blockchain.add_block(decrypted_response)
+                print(f"Server says: {decrypted_response}")
 
         except Exception as e:
             print(f"An error occurred: {e}")
@@ -53,6 +46,6 @@ def connect_to_server(host, port):
             client_socket.close()
 
 if __name__ == "__main__":
-    host = input("Enter the server's IP address: ")
+    host = socket.gethostname()  # Replace if different ips
     port = 9999
     connect_to_server(host, port)
