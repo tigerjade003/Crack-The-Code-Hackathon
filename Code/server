@@ -15,37 +15,52 @@ def start_server(host, port, max_connections=2):
         print(f"Server started on {host}:{port}. Waiting for connections...")
 
         while True:
+            print("Please enter the IP address of the client to connect to:")
+            client_ip = input()  # User inputs the client IP address
+            client_port = port  # Assuming the client is listening on the same port
             try:
-                client_socket, addr = server_socket.accept()
-                with closing(client_socket):
-                    print(f"Connected to {addr}")
-                    # Generate a key for this session and establish a Fernet connection
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as outbound_socket:
+                    outbound_socket.connect((client_ip, client_port))
+                    print(f"Connected to client at {client_ip}:{client_port}")
                     key = generate_key()
+                    fernet = Fernet(key)
 
                     # Send the key to the client securely
-                    client_socket.sendall(key)
-                    fernet = Fernet(key)
-                    while True:
+                    outbound_socket.sendall(key)
+
+                    # Send a message to the client asking if they want to connect
+                    outbound_socket.sendall(b"Do you want to connect to the server? (yes/no)")
+                    response = outbound_socket.recv(1024).decode('utf-8')
+                    if response.lower() == 'yes':
+                        print("Client has agreed to connect.")
+                        # Proceed with the client-server exchange
+                        while True:
+
+
                         # Receive message from client
-                        encrypted_data = client_socket.recv(1024)
-                        if not encrypted_data:
-                            break
-                        #decypt the recived data from client
-                        decrypted_data = decrypt_message(connection(key), encrypted_data)
-                        print(f"Client says: {decrypted_data}")
+                        # Receive message from client
+                            encrypted_data = outbound_socket.recv(1024)
+                            if not encrypted_data:
+                                print("Client has disconnected.")
+                                break
+                            #decypt the recived data from client
+                            decrypted_data = decrypt_message(connection(key), encrypted_data)
+                            print(f"Client says: {decrypted_data}")
                         # Add decrypted_data to blockchain
-                        blockchain.add_block(decrypted_data)
+                            blockchain.add_block(decrypted_data)
                         # Send response to client
-                        server_response = input("Enter your response: ")
-                        encrypted_response = encrypt(connection(key), server_response)
+                            server_response = input("Enter your response: ")
+                            encrypted_response = encrypt(connection(key), server_response)
                         # Add server response to blockchain
 
-                        blockchain.add_block(server_response)
-                        client_socket.sendall(encrypted_response)
+                            blockchain.add_block(server_response)
+                            outbound_socket.sendall(encrypted_response)
+                    else:
+                        print("Client has declined the connection.")
             except Exception as e:
                 print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
-    host = socket.gethostname()
+    host = '0.0.0.0'
     port = 9999
     start_server(host, port)
